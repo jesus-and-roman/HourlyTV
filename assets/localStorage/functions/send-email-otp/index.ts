@@ -7,6 +7,7 @@
 //
 // Cette fonction tourne côté serveur : c'est la seule à connaître la clé
 // service_role et la clé Resend. Le navigateur ne voit jamais ces secrets.
+// application pour avoir la clé RESEND_API_KEY et ajouter dans secrets après: https://resend.com/onboarding
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
