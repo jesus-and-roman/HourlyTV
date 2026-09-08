@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Modération</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <h1 style="font-weight:500;font-size:20px;margin-bottom:6px">Espace modération</h1>
+      <p class="algo-text" style="margin-bottom:20px">
+        Réservé aux comptes avec le rôle "modérateur". L'exécution SQL directe doit passer par une
+        fonction Supabase sécurisée (RPC <code>security definer</code>, restreinte par RLS au rôle
+        modérateur) — jamais par une requête envoyée telle quelle depuis le navigateur. La zone du
+        bas illustre l'interface ; le bouton "Exécuter" doit être branché à cette fonction côté serveur.
+      </p>
+
+      <div class="htv-settings-card" style="margin-bottom:20px">
+        <h3>Actions rapides</h3>
+        <table class="htv-table">
+          <thead><tr><th>Utilisateur / vidéo</th><th>Signalement</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>@testuser — "Vidéo test"</td><td>Contenu signalé x3</td>
+              <td style="display:flex;gap:6px">
+                <button class="btn">Approuver</button>
+                <button class="btn btn-danger">Bannir l'usager</button>
+                <button class="btn btn-danger">Expulser</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="htv-settings-card">
+        <h3>Console SQL (interface — à brancher sur une RPC sécurisée)</h3>
+        <div class="field"><textarea id="mod-sql" rows="5" placeholder="SELECT * FROM videos WHERE ..."></textarea></div>
+        <button class="btn btn-primary" id="mod-run">Exécuter</button>
+        <pre id="mod-result" class="algo-text" style="margin-top:12px;white-space:pre-wrap"></pre>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+    htvInitPage("moderation.html");
+    document.getElementById("mod-run").addEventListener("click", () => {
+      document.getElementById("mod-result").textContent =
+        "Aucun backend connecté dans cette démo. Branche cette requête à une fonction Supabase RPC réservée au rôle modérateur.";
+    });
+  </script>
+</body>
+</html>

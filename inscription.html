@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Inscription</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main" style="width:100%">
+      <div class="htv-auth-card" id="htv-auth-card">
+
+        <div id="step-form">
+          <h1>Créer un compte</h1>
+          <p class="sub">Rejoins HourlyTV en quelques secondes.</p>
+
+          <div class="field-toggle-row" style="margin-bottom:16px">
+            <button type="button" id="mode-email" class="active">Courriel</button>
+            <button type="button" id="mode-phone">Numéro de téléphone</button>
+          </div>
+
+          <form id="form-signup">
+            <div class="field" id="field-email">
+              <label>Adresse courriel</label>
+              <input type="email" id="signup-email">
+            </div>
+            <div class="field" id="field-phone" style="display:none">
+              <label>Numéro de téléphone</label>
+              <input type="tel" id="signup-phone" placeholder="+1 418 000 0000">
+            </div>
+            <div class="field">
+              <label>Surnom</label>
+              <input type="text" id="signup-nickname" required>
+            </div>
+            <div class="field">
+              <label>Username</label>
+              <input type="text" id="signup-username" placeholder="@monusername" required>
+            </div>
+            <div class="field">
+              <label>Mot de passe</label>
+              <input type="password" id="signup-password" required minlength="8">
+            </div>
+            <div id="signup-quota-msg" class="htv-quota-msg" style="display:none"></div>
+            <button class="btn btn-primary btn-block" type="submit">S'inscrire</button>
+          </form>
+
+          <div class="htv-auth-switch">
+            Déjà inscrit ? <a href="connexion.html">Se connecter</a>
+          </div>
+        </div>
+
+        <div id="step-verify" style="display:none; text-align:center">
+          <div style="font-size:46px; margin-bottom:14px">📱</div>
+          <h1>Une dernière étape</h1>
+          <p class="sub" id="verify-target-msg"></p>
+          <p style="font-size:13.5px">Vérifie ton email ou ton numéro de téléphone en appuyant sur le lien joint.</p>
+          <button class="btn btn-primary btn-block" id="btn-simulate-verify" style="margin-top:14px">
+            (démo) Simuler la vérification
+          </button>
+          <div class="htv-auth-switch">
+            <a href="connexion.html">Aller à la page de connexion</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    htvInitPage("inscription.html");
+
+    const modeEmailBtn = document.getElementById("mode-email");
+    const modePhoneBtn = document.getElementById("mode-phone");
+    const fieldEmail = document.getElementById("field-email");
+    const fieldPhone = document.getElementById("field-phone");
+
+    modeEmailBtn.addEventListener("click", () => {
+      modeEmailBtn.classList.add("active"); modePhoneBtn.classList.remove("active");
+      fieldEmail.style.display = ""; fieldPhone.style.display = "none";
+    });
+    modePhoneBtn.addEventListener("click", () => {
+      modePhoneBtn.classList.add("active"); modeEmailBtn.classList.remove("active");
+      fieldPhone.style.display = ""; fieldEmail.style.display = "none";
+    });
+
+    const quotaMsg = document.getElementById("signup-quota-msg");
+    const quota = htvCheckQuota();
+    if (!quota.emailOk && !quota.smsOk) {
+      quotaMsg.style.display = "block";
+      quotaMsg.textContent = "Quota maximum fourni par le fournisseur. Revenez plus tard.";
+      document.querySelector("#form-signup button[type=submit]").disabled = true;
+    }
+
+    document.getElementById("form-signup").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const usingPhone = modePhoneBtn.classList.contains("active");
+      const contact = usingPhone ? document.getElementById("signup-phone").value : document.getElementById("signup-email").value;
+      if (usingPhone && !quota.smsOk) { alert("Quota SMS atteint pour l'instant."); return; }
+      if (!usingPhone && !quota.emailOk) { alert("Quota courriel atteint pour l'instant."); return; }
+
+      const payload = {
+        contact, usingPhone,
+        nickname: document.getElementById("signup-nickname").value,
+        username: document.getElementById("signup-username").value,
+        password: document.getElementById("signup-password").value,
+      };
+      htvRegisterPending(payload);
+
+      document.getElementById("step-form").style.display = "none";
+      document.getElementById("step-verify").style.display = "block";
+      document.getElementById("verify-target-msg").textContent =
+        usingPhone ? `Un lien a été envoyé par SMS au ${contact}.` : `Un lien a été envoyé par courriel à ${contact}.`;
+    });
+
+    document.getElementById("btn-simulate-verify").addEventListener("click", () => {
+      htvCompletePendingRegistration();
+      window.location.href = "connexion.html";
+    });
+  </script>
+</body>
+</html>

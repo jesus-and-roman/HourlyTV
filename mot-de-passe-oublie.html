@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Mot de passe oublié</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main" style="width:100%">
+      <div class="htv-auth-card">
+
+        <div id="step-request">
+          <h1>Mot de passe oublié</h1>
+          <p class="sub">Reçois un code à 5 chiffres pour réinitialiser ton mot de passe.</p>
+
+          <div class="field-toggle-row" style="margin-bottom:16px">
+            <button type="button" id="mode-email" class="active">Courriel</button>
+            <button type="button" id="mode-phone">Téléphone</button>
+          </div>
+
+          <form id="form-request">
+            <div class="field" id="field-email">
+              <label>Adresse courriel</label>
+              <input type="email" id="reset-email">
+            </div>
+            <div class="field" id="field-phone" style="display:none">
+              <label>Numéro de téléphone</label>
+              <input type="tel" id="reset-phone">
+            </div>
+            <div id="reset-quota-msg" class="htv-quota-msg" style="display:none"></div>
+            <button class="btn btn-primary btn-block" type="submit">Envoyer le code</button>
+          </form>
+        </div>
+
+        <div id="step-code" style="display:none">
+          <h1>Entre le code</h1>
+          <p class="sub" id="code-target-msg"></p>
+          <form id="form-code">
+            <div class="field">
+              <label>Code à 5 chiffres</label>
+              <input type="text" maxlength="5" pattern="\d{5}" id="reset-code" required>
+            </div>
+            <div class="field">
+              <label>Nouveau mot de passe</label>
+              <input type="password" id="reset-new-password" minlength="8" required>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Réinitialiser</button>
+          </form>
+        </div>
+
+        <div class="htv-auth-switch"><a href="connexion.html">Retour à la connexion</a></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    htvInitPage("mot-de-passe-oublie.html");
+
+    const modeEmailBtn = document.getElementById("mode-email");
+    const modePhoneBtn = document.getElementById("mode-phone");
+    const fieldEmail = document.getElementById("field-email");
+    const fieldPhone = document.getElementById("field-phone");
+    modeEmailBtn.addEventListener("click", () => {
+      modeEmailBtn.classList.add("active"); modePhoneBtn.classList.remove("active");
+      fieldEmail.style.display = ""; fieldPhone.style.display = "none";
+    });
+    modePhoneBtn.addEventListener("click", () => {
+      modePhoneBtn.classList.add("active"); modeEmailBtn.classList.remove("active");
+      fieldPhone.style.display = ""; fieldEmail.style.display = "none";
+    });
+
+    const quota = htvCheckQuota();
+    const quotaMsg = document.getElementById("reset-quota-msg");
+    if (!quota.emailOk && !quota.smsOk) {
+      quotaMsg.style.display = "block";
+      quotaMsg.textContent = "Quota maximum fourni par le fournisseur. Revenez plus tard.";
+      document.querySelector("#form-request button[type=submit]").disabled = true;
+    }
+
+    let generatedCode = null;
+    document.getElementById("form-request").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const usingPhone = modePhoneBtn.classList.contains("active");
+      if (usingPhone && !quota.smsOk) { alert("Quota SMS atteint."); return; }
+      if (!usingPhone && !quota.emailOk) { alert("Quota courriel atteint."); return; }
+      const target = usingPhone ? document.getElementById("reset-phone").value : document.getElementById("reset-email").value;
+      generatedCode = htvGenerateResetCode(target);
+      document.getElementById("step-request").style.display = "none";
+      document.getElementById("step-code").style.display = "block";
+      document.getElementById("code-target-msg").textContent =
+        `Un code à 5 chiffres a été envoyé ${usingPhone ? "par SMS" : "par courriel"} à ${target}. (démo : ${generatedCode})`;
+    });
+
+    document.getElementById("form-code").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const entered = document.getElementById("reset-code").value;
+      if (entered !== generatedCode) { alert("Code invalide."); return; }
+      htvResetPassword(document.getElementById("reset-new-password").value);
+      alert("Mot de passe réinitialisé. Tu peux te connecter.");
+      window.location.href = "connexion.html";
+    });
+  </script>
+</body>
+</html>

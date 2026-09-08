@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Enregistré pour plus tard</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <h1 style="font-weight:500;font-size:20px;margin-bottom:16px">Enregistré pour plus tard</h1>
+      <div class="htv-grid" id="saved-grid"></div><script>document.getElementById("saved-grid").innerHTML = HTV_VIDEOS.slice(0,4).map(v=>`<a class="htv-card" href="video.html?id=${v.id}"><div class="htv-thumb"><div class="htv-thumb-gradient" style="background:linear-gradient(135deg, ${v.thumbnailColors[0]}, ${v.thumbnailColors[2]})"></div><span class="htv-thumb-duration">${htvFormatDuration(v.duration)}</span></div><div class="htv-card-title">${v.title}</div></a>`).join("");</script>
+    </main>
+  </div>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script>htvInitPage("enregistrements.html");</script>
+</body>
+</html>

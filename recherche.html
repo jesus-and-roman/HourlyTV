@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Recherche</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <h1 style="font-weight:500;font-size:18px;margin-bottom:16px">Résultats pour « <span id="q-text"></span> »</h1>
+      <p class="algo-text" style="margin-bottom:16px">Classement : 90% pertinence texte, 10% algorithme personnel.</p>
+      <div class="htv-grid" id="search-grid"></div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/algorithm.js"></script>
+  <script>
+    htvInitPage("recherche.html");
+    const q = new URLSearchParams(location.search).get("q") || "";
+    document.getElementById("q-text").textContent = q;
+    htvLoadCategoryMap().then(() => {
+      const ranked = htvRankVideos(HTV_VIDEOS, q);
+      const grid = document.getElementById("search-grid");
+      grid.innerHTML = ranked.map(({ video }) => `
+        <a class="htv-card" href="video.html?id=${video.id}">
+          <div class="htv-thumb"><div class="htv-thumb-gradient" style="background:linear-gradient(135deg, ${video.thumbnailColors[0]}, ${video.thumbnailColors[2]})"></div>
+            <span class="htv-thumb-duration">${htvFormatDuration(video.duration)}</span></div>
+          <div class="htv-card-title">${video.title}</div>
+          <div class="htv-card-desc">${video.description.slice(0, 20)}…</div>
+          <div class="htv-card-tags">${video.hashtags.slice(0,2).map(h=>`<span class="htv-tag">#${h}</span>`).join("")}</div>
+          <div class="htv-card-meta"><span>${htvFormatViews(video.views)} vues</span><span>${htvLikePercent(video)}% 👍</span></div>
+        </a>`).join("") || `<div class="htv-empty">Aucun résultat.</div>`;
+    });
+  </script>
+</body>
+</html>

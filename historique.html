@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Historique</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <h1 style="font-weight:500;font-size:20px;margin-bottom:16px">Historique de visionnage</h1>
+      <table class="htv-table" id="history-table">
+        <thead><tr><th>Titre</th><th>% écouté</th><th>Aimé</th><th>Date</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="htv-empty" id="history-empty" style="display:none">Aucune vidéo dans ton historique pour l'instant.</p>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/algorithm.js"></script>
+  <script>
+    htvInitPage("historique.html");
+    const hist = htvLoadHistory().slice().reverse();
+    const tbody = document.querySelector("#history-table tbody");
+    if (!hist.length) {
+      document.getElementById("history-table").style.display = "none";
+      document.getElementById("history-empty").style.display = "block";
+    } else {
+      tbody.innerHTML = hist.map((h) => `
+        <tr>
+          <td>${h.title}</td>
+          <td>${Math.round(h.watchPercent * 100)}%</td>
+          <td>${h.liked ? "👍" : h.disliked ? "👎" : "—"}</td>
+          <td>${new Date(h.timestamp).toLocaleString("fr-CA")}</td>
+        </tr>`).join("");
+    }
+  </script>
+</body>
+</html>

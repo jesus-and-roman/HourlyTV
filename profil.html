@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Profil</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <div id="profile-content"></div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    htvInitPage("profil.html");
+    const username = (new URLSearchParams(location.search).get("u") || "").replace(/^@/, "");
+    const users = htvGetUsers();
+    const found = users.find((u) => u.username.replace(/^@/, "") === username);
+    const el = document.getElementById("profile-content");
+    el.innerHTML = found
+      ? `<div class="htv-banner"></div>
+         <div class="htv-profile-head">
+           <div class="htv-profile-pfp"></div>
+           <div class="htv-profile-names"><h1>${found.nickname}</h1><span>@${found.username.replace(/^@/, "")}</span></div>
+         </div>
+         <p style="margin-top:18px" class="htv-card-desc">${found.bio || "Aucune description."}</p>`
+      : `<div class="htv-empty">404 — cet usager n'existe pas.</div>`;
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Paramètres</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <div class="htv-settings-grid">
+        <nav class="htv-settings-nav">
+          <button class="active" data-panel="panel-personal">Informations personnelles</button>
+          <button data-panel="panel-private">Courriel, téléphone &amp; mot de passe</button>
+          <button data-panel="panel-cookies">Historique &amp; algorithme</button>
+          <button data-panel="panel-security">Sécurité &amp; connexions</button>
+          <button data-panel="panel-theme">Apparence</button>
+        </nav>
+
+        <div>
+          <section id="panel-personal" class="htv-settings-panel active">
+            <div class="htv-settings-card">
+              <h3>Surnom</h3>
+              <div class="field"><input type="text" id="input-nickname"></div>
+              <p class="field-hint" id="nickname-hint"></p>
+              <button class="btn btn-primary" id="btn-save-nickname">Enregistrer</button>
+            </div>
+            <div class="htv-settings-card">
+              <h3>Username</h3>
+              <div class="field"><input type="text" id="input-username"></div>
+              <p class="field-hint" id="username-hint"></p>
+              <button class="btn btn-primary" id="btn-save-username">Enregistrer</button>
+            </div>
+          </section>
+
+          <section id="panel-private" class="htv-settings-panel">
+            <div class="htv-settings-card" id="private-locked">
+              <h3>Informations sensibles</h3>
+              <p class="field-hint">Confirme ton mot de passe pour voir et modifier ces informations.</p>
+              <div class="field"><input type="password" id="private-password-check" placeholder="Mot de passe actuel"></div>
+              <button class="btn btn-primary" id="btn-unlock-private">Déverrouiller</button>
+            </div>
+            <div class="htv-settings-card" id="private-unlocked" style="display:none">
+              <h3>Courriel</h3>
+              <div class="field"><input type="email" id="input-email"></div>
+              <button class="btn" id="btn-save-email">Mettre à jour</button>
+            </div>
+            <div class="htv-settings-card" id="private-phone-card" style="display:none">
+              <h3>Numéro de téléphone</h3>
+              <div class="field"><input type="tel" id="input-phone"></div>
+              <button class="btn" id="btn-save-phone">Mettre à jour</button>
+            </div>
+            <div class="htv-settings-card" id="private-password-card" style="display:none">
+              <h3>Mot de passe</h3>
+              <div class="field"><input type="password" id="input-new-password" placeholder="Nouveau mot de passe"></div>
+              <button class="btn" id="btn-save-password">Changer le mot de passe</button>
+            </div>
+          </section>
+
+          <section id="panel-cookies" class="htv-settings-panel">
+            <div class="htv-settings-card">
+              <h3>Cookies d'écoute</h3>
+              <div class="htv-kv-row"><span>Nombre d'entrées</span><span id="cookie-count">0</span></div>
+              <div class="htv-kv-row"><span>Taille</span><span id="cookie-size">0 o</span></div>
+              <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap">
+                <button class="btn" id="btn-download-cookies">Télécharger l'algorithme</button>
+                <button class="btn btn-danger" id="btn-delete-cookies">Supprimer mes cookies</button>
+              </div>
+            </div>
+          </section>
+
+          <section id="panel-security" class="htv-settings-panel">
+            <div class="htv-settings-card">
+              <h3>Connexions récentes</h3>
+              <table class="htv-table">
+                <thead><tr><th>IP</th><th>Localisation</th><th>Appareil</th><th>Date</th></tr></thead>
+                <tbody id="connections-body"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="panel-theme" class="htv-settings-panel">
+            <div class="htv-settings-card">
+              <h3>Thème</h3>
+              <div class="htv-theme-toggle">
+                <span>Sombre (gris)</span>
+                <label style="display:inline-flex;align-items:center;gap:8px">
+                  <input type="checkbox" id="theme-switch"> <span>Clair (blanc)</span>
+                </label>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="htv-modal-backdrop" id="delete-modal">
+    <div class="htv-modal">
+      <h3>Supprimer les cookies d'écoute</h3>
+      <p>Attention ! Vos cookies d'écoute sont personnels et c'est ce qui gère vos recommandations, nous n'avons jamais accès à ces cookies. Êtes-vous sûr de vouloir les supprimer ?</p>
+      <div class="htv-modal-actions">
+        <button class="btn" id="cancel-delete">Annuler</button>
+        <button class="btn btn-danger" id="confirm-delete">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/algorithm.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/settings.js"></script>
+</body>
+</html>

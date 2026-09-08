@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Vidéo</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <div class="htv-video-layout">
+        <div>
+          <div class="htv-player" id="htv-player">
+            <span class="algo-text">chargement du lecteur…</span>
+          </div>
+
+          <h1 class="htv-video-title" id="htv-video-title"></h1>
+          <div class="htv-video-meta-row">
+            <span class="htv-card-meta" id="htv-video-meta"></span>
+            <div class="htv-video-actions">
+              <button class="btn" id="btn-like">👍 <span id="like-count"></span></button>
+              <button class="btn" id="btn-dislike">👎</button>
+              <button class="btn" id="btn-save">Enregistrer</button>
+              <button class="btn" id="btn-favorite">Favoris</button>
+              <button class="btn" id="btn-share">Partager</button>
+            </div>
+          </div>
+
+          <div class="htv-channel-row">
+            <div class="htv-channel-pfp"></div>
+            <div style="flex:1">
+              <div class="strong" id="htv-channel-name"></div>
+              <div class="algo-text" style="font-size:12px" id="htv-channel-sub-count">—</div>
+            </div>
+            <button class="btn btn-primary" id="btn-subscribe">S'abonner</button>
+          </div>
+
+          <div class="htv-desc-box" id="htv-video-desc"></div>
+
+          <div id="htv-login-gate"></div>
+
+          <div class="htv-comments" id="htv-comments">
+            <h3 style="font-weight:500;font-size:15px">Commentaires</h3>
+            <div id="htv-comment-form-slot"></div>
+            <div id="htv-comment-list"></div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="htv-section-head"><h2>À suivre</h2></div>
+          <div id="htv-related" style="display:flex;flex-direction:column;gap:14px"></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/algorithm.js"></script>
+  <script src="assets/js/video.js"></script>
+</body>
+</html>

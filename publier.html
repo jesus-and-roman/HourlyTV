@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Publier une vidéo</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main" style="max-width:640px">
+      <h1 style="font-weight:500;font-size:20px;margin-bottom:18px">Publier une vidéo</h1>
+
+      <form id="form-publish">
+        <div class="field">
+          <label>Titre (50 caractères maximum)</label>
+          <input type="text" id="pub-title" maxlength="50" required>
+          <span class="field-hint"><span id="title-count">0</span>/50</span>
+        </div>
+        <div class="field">
+          <label>Description (1000 caractères maximum)</label>
+          <textarea id="pub-desc" rows="4" maxlength="1000"></textarea>
+          <span class="field-hint"><span id="desc-count">0</span>/1000</span>
+        </div>
+        <div class="field">
+          <label>Hashtags (8 maximum, séparés par des espaces)</label>
+          <input type="text" id="pub-tags" placeholder="#gaming #gta6">
+          <span class="field-hint" id="tags-hint">0/8</span>
+        </div>
+
+        <div class="field">
+          <label>Fichier vidéo</label>
+          <input type="file" id="pub-file" accept="video/*">
+          <span class="field-hint">Envoyé sur gofile, puis associé à la vidéo côté serveur.</span>
+        </div>
+
+        <div class="field">
+          <label>Bannière</label>
+          <div class="htv-thumb" id="pub-banner-preview" style="max-width:320px;background:var(--bg-elevated-2)"></div>
+          <span class="field-hint">Survole 3 secondes sans bouger pour prévisualiser les 5 premières secondes de la vidéo une fois uploadée.</span>
+        </div>
+
+        <div class="field">
+          <label>Visibilité</label>
+          <select id="pub-visibility">
+            <option value="public">Public</option>
+            <option value="non-repertorie">Non répertorié (lien uniquement)</option>
+            <option value="prive">Privé (créateur uniquement)</option>
+            <option value="liste-privee">Liste privée (usagers choisis)</option>
+          </select>
+        </div>
+        <div class="field" id="pub-private-list-field" style="display:none">
+          <label>Usagers autorisés (usernames séparés par des virgules)</label>
+          <input type="text" id="pub-private-list">
+        </div>
+
+        <div class="field">
+          <label>Apparaître dans le référencement</label>
+          <div class="field-toggle-row">
+            <button type="button" id="ref-yes" class="active">Oui — visible partout</button>
+            <button type="button" id="ref-no">Non — recherche uniquement</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" type="submit">Publier</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    htvInitPage("publier.html");
+    if (!htvCurrentUser()) window.location.href = "connexion.html";
+
+    const titleInput = document.getElementById("pub-title");
+    titleInput.addEventListener("input", () => document.getElementById("title-count").textContent = titleInput.value.length);
+    const descInput = document.getElementById("pub-desc");
+    descInput.addEventListener("input", () => document.getElementById("desc-count").textContent = descInput.value.length);
+    const tagsInput = document.getElementById("pub-tags");
+    tagsInput.addEventListener("input", () => {
+      const tags = tagsInput.value.split(/\s+/).filter(Boolean);
+      document.getElementById("tags-hint").textContent = `${Math.min(tags.length, 8)}/8`;
+      if (tags.length > 8) tagsInput.value = tags.slice(0, 8).join(" ");
+    });
+
+    document.getElementById("pub-visibility").addEventListener("change", (e) => {
+      document.getElementById("pub-private-list-field").style.display = e.target.value === "liste-privee" ? "block" : "none";
+    });
+
+    const refYes = document.getElementById("ref-yes"), refNo = document.getElementById("ref-no");
+    refYes.addEventListener("click", () => { refYes.classList.add("active"); refNo.classList.remove("active"); });
+    refNo.addEventListener("click", () => { refNo.classList.add("active"); refYes.classList.remove("active"); });
+
+    // Survol 3s -> prévisualisation (ici simulée par un dégradé animé faute de vrai fichier uploadé)
+    const preview = document.getElementById("pub-banner-preview");
+    let hoverTimer = null;
+    preview.addEventListener("mouseenter", () => {
+      hoverTimer = setTimeout(() => { preview.style.background = "linear-gradient(120deg, var(--green-dim), var(--green))"; }, 3000);
+    });
+    preview.addEventListener("mouseleave", () => {
+      clearTimeout(hoverTimer);
+      preview.style.background = "var(--bg-elevated-2)";
+    });
+
+    document.getElementById("form-publish").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Cette démo ne téléverse pas réellement vers gofile — il faut un point d'entrée serveur (Supabase Edge Function) pour ça. Le formulaire est prêt à être branché.");
+    });
+  </script>
+</body>
+</html>

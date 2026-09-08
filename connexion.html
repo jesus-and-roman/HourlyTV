@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Connexion</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main" style="width:100%">
+      <div class="htv-auth-card">
+        <h1>Se connecter</h1>
+        <p class="sub">Retrouve tes recommandations et ton historique.</p>
+
+        <form id="form-login">
+          <div class="field">
+            <label>Adresse courriel</label>
+            <input type="email" id="login-email" required>
+          </div>
+          <div class="field">
+            <label>Mot de passe</label>
+            <input type="password" id="login-password" required>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Se connecter</button>
+        </form>
+
+        <div class="htv-auth-switch">
+          <a href="mot-de-passe-oublie.html">J'ai oublié mon mot de passe</a>
+        </div>
+        <div class="htv-auth-switch">
+          Pas encore de compte ? <a href="inscription.html">S'inscrire</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    htvInitPage("connexion.html");
+    document.getElementById("form-login").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      const result = htvLogin(email, password);
+      if (result.ok) window.location.href = "index.html";
+      else alert(result.error);
+    });
+  </script>
+</body>
+</html>

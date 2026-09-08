@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Statistiques</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <h1 style="font-weight:500;font-size:20px;margin-bottom:6px">Statistiques</h1>
+      <p class="algo-text" style="margin-bottom:20px">Ces chiffres nécessitent une base Supabase branchée (agrégats par requêtes SQL) — vue de démonstration ci-dessous.</p>
+
+      <div class="htv-settings-grid">
+        <nav class="htv-settings-nav">
+          <button class="active" data-panel="p-overview">Vue d'ensemble</button>
+          <button data-panel="p-likes">J'aime / Je n'aime pas</button>
+          <button data-panel="p-subs">Abonnés</button>
+          <button data-panel="p-videos">Vidéos publiées</button>
+          <button data-panel="p-mod">Modération</button>
+        </nav>
+        <div>
+          <section id="p-overview" class="htv-settings-panel active">
+            <div class="htv-settings-card"><h3>Vues totales (30 derniers jours)</h3><p style="font-size:28px;font-weight:500;color:var(--green)">128 400</p></div>
+          </section>
+          <section id="p-likes" class="htv-settings-panel">
+            <div class="htv-settings-card"><h3>Ratio j'aime / je n'aime pas</h3><p>92% j'aime sur les 30 derniers jours.</p></div>
+          </section>
+          <section id="p-subs" class="htv-settings-panel">
+            <div class="htv-settings-card"><h3>Abonnés</h3><p>+340 cette semaine, -12 désabonnements.</p></div>
+          </section>
+          <section id="p-videos" class="htv-settings-panel">
+            <div class="htv-settings-card">
+              <h3>Vidéos publiées — visibilité</h3>
+              <table class="htv-table">
+                <thead><tr><th>Titre</th><th>Visibilité</th><th>Statut modération</th></tr></thead>
+                <tbody>
+                  <tr><td>GTA 6 : tout ce qu'on sait</td><td>Public</td><td>Approuvée</td></tr>
+                  <tr><td>Session privée test</td><td>Privé</td><td>En attente</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section id="p-mod" class="htv-settings-panel">
+            <div class="htv-settings-card"><h3>File de modération</h3><p>0 signalement actif sur tes vidéos.</p></div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+    htvInitPage("statistiques.html");
+    document.querySelectorAll(".htv-settings-nav button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".htv-settings-nav button").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".htv-settings-panel").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.panel).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

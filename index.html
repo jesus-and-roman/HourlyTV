@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+
+      <section class="htv-section">
+        <div class="htv-section-head">
+          <h2>Recommandés par l'algorithme</h2>
+        </div>
+        <div class="htv-grid" id="htv-reco-grid"></div>
+      </section>
+
+      <section class="htv-section">
+        <div class="htv-section-head">
+          <h2>Changer de domaine d'écoute</h2>
+          <button class="htv-shuffle-btn" id="htv-shuffle-domain">⟳ Randomiser</button>
+        </div>
+        <div class="htv-row" id="htv-domain-row"></div>
+      </section>
+
+      <section class="htv-section">
+        <div class="htv-section-head">
+          <h2>Au hasard</h2>
+          <button class="htv-shuffle-btn" id="htv-shuffle-random">⟳ Randomiser</button>
+        </div>
+        <div class="htv-row" id="htv-random-row"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/algorithm.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

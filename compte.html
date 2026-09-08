@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HourlyTV — Mon compte</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="htv-shell">
+    <main class="htv-main">
+      <div id="htv-account-content"></div>
+    </main>
+  </div>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    htvInitPage("compte.html");
+    const user = htvCurrentUser();
+    const el = document.getElementById("htv-account-content");
+    if (!user) {
+      window.location.href = "inscription.html";
+    } else {
+      const myVideos = HTV_VIDEOS.slice(0, 4); // démo : "mes vidéos publiées"
+      el.innerHTML = `
+        <div class="htv-banner"></div>
+        <div class="htv-profile-head">
+          <div class="htv-profile-pfp"></div>
+          <div class="htv-profile-names" style="flex:1">
+            <div style="display:flex;align-items:center;gap:10px">
+              <h1>${user.nickname}</h1>
+              <a href="parametres.html" class="algo-text" style="font-size:13px">Modifier le profil</a>
+            </div>
+            <span>@${user.username} · né le —</span>
+          </div>
+        </div>
+        <p style="margin:18px 0 26px" class="htv-card-desc">${user.bio || "Aucune description pour l'instant."}</p>
+        <h2 style="font-weight:500;font-size:16px;margin-bottom:14px">Vidéos publiées</h2>
+        <div class="htv-grid">
+          ${myVideos.map((v) => `
+            <a class="htv-card" href="video.html?id=${v.id}">
+              <div class="htv-thumb"><div class="htv-thumb-gradient" style="background:linear-gradient(135deg, ${v.thumbnailColors[0]}, ${v.thumbnailColors[2]})"></div>
+                <span class="htv-thumb-duration">${htvFormatDuration(v.duration)}</span></div>
+              <div class="htv-card-title">${v.title}</div>
+              <div class="htv-card-desc">${v.description.slice(0, 20)}…</div>
+              <div class="htv-card-tags">${v.hashtags.slice(0, 2).map((h) => `<span class="htv-tag">#${h}</span>`).join("")}</div>
+              <div class="htv-card-meta"><span>${htvFormatViews(v.views)} vues</span><span>${htvLikePercent(v)}% 👍</span></div>
+            </a>`).join("")}
+        </div>`;
+    }
+  </script>
+</body>
+</html>
